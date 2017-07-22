@@ -1,0 +1,28 @@
+a {
+    color:#000
+}
+a:hover,a.protocol:hover {
+    color:#f00
+}
+a.protocol {
+    color:#62d26d
+}
+
+.url {
+    clear:both;
+    width:73.04601899196494%
+}
+.option section {
+    display: inline-block
+}
+ul {
+    list-style:none
+}
+li {
+    line-height:32px
+}
+li span {
+    font-weight:bold;
+    display:inline-block;
+    padding-right:20px
+}
