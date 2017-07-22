@@ -1,0 +1,25 @@
+{
+  "name": "api.flxxyz.com",
+  "version": "1.0.0",
+  "description": "api.flxxyz.com的开源版本，拿走点个赞就行了",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flxxyz/api.flxxyz.com.git"
+  },
+  "keywords": [
+    "api"
+  ],
+  "author": "flxxyz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/flxxyz/api.flxxyz.com/issues"
+  },
+  "homepage": "https://github.com/flxxyz/api.flxxyz.com#readme",
+  "dependencies": {
+    "jquery": "^3.2.1"
+  }
+}
