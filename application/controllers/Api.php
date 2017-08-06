@@ -2,28 +2,34 @@
 
 class Api extends CI_Controller
 {
+    protected $api;
     protected $apiKey = '';
     protected $secretKey = '';
 
     public function __construct()
     {
-        $this->apiKey = '2d14279f45191c85f5604911bc50b7e9';
-        $this->secretKey = '5b8f72263ce2923d';
+        //$pdo = new PDO('dsn', 'user', 'pwd', 'option');
+        $this->apiKey = '';
+        $this->secretKey = '';
+        $this->api = new CloudXNS\Api();
+        $this->api->setApiKey($this->apiKey);
+        $this->api->setSecretKey($this->secretKey);
+        $this->api->setProtocol(true);
     }
 
     public function domain($param = 'list')
     {
-        echo '<pre>';
+        //header('Content-type: application/json');
+
         switch ($param) {
             case 'add':
-                $this->domainAdd();
+                echo $this->domainAdd();
                 break;
             case 'del':
                 $this->domainDel();
                 break;
             default:
-                $this->domainList();
-                //$this->ajaxReturn(1, '', $data);
+                echo $this->domainList();
                 break;
         }
         //$domainResult= $this->handle();
@@ -32,7 +38,10 @@ class Api extends CI_Controller
 
     protected function domainList()
     {
-        return $this->handle();
+        $result = $this->handleListData();
+        return json_encode($result);
+        //return ($result);
+        //var_dump(empty(''));
     }
 
     protected function domainAdd()
@@ -45,40 +54,61 @@ class Api extends CI_Controller
 
     }
 
-    protected function handle()
+    protected function handleListData()
     {
-        $api = new CloudXNS\Api();
-        $api->setApiKey($this->apiKey);
-        $api->setSecretKey($this->secretKey);
-        $api->setProtocol(true);
+        $result = json_decode($this->api->domain->domainList());
+        $data = [];
+        foreach ( $result->data as $k => $v ) {
+            $data[$k][] = $v->id;
+            $data[$k][] = $v->domain;
+            $data[$k][] = $this->status($v->status);
+            $data[$k][] = $this->take_over_status($v->take_over_status);
+            $data[$k][] = $v->level;
+            $datetime = new DateTime($v->create_time, new DateTimeZone('PRC'));
+            $data[$k][] = $this->time_null($datetime->format('Y-m-d H:i:s'));
+            $data[$k][] = $this->time_null($v->update_time);
+            $data[$k][] = $v->ttl;
+        }
 
-        $result = $this->request($api);
-        $result->data = $this->handleData($result->data);
-        return $result;
+        return $data;
     }
 
-    protected function handleData($data)
+    protected function status($state)
     {
-        $domainList = [];
-
-        foreach ( $data as $k1 => $v1 ) {
-            $domain = [];
-            $id = '';
-            foreach ( $v1 as $k2 => $v2 ) {
-                /*if($k2 === 'id') {
-                    $id = $v2;
-                    $domain[$id] = [];
-                }else {
-                    $domain[$id][$k2] = $v2;
-                }*/
-                $domain[$k2] = $v2;
-            }
-            //$domainList;
-            array_push($domainList, $domain);
+        switch ($state) {
+            case "ok":
+                return '域名正常使用';
+                break;
+            case "userlock":
+                return '用户锁定中';
+                break;
+            default:
+                return '域名异常';
+                break;
         }
-        //var_dump($domainList);
+    }
 
-        return $domainList;
+    protected function take_over_status($state)
+    {
+        switch ($state) {
+            case "Untaken over":
+                return '未接管';
+                break;
+            case "Taken over":
+                return '已接管';
+                break;
+            default:
+                return '接管异常';
+                break;
+        }
+    }
+
+    protected function time_null($time) {
+        if(empty($time)) {
+            return date('Y-m-d H:i:s');
+        }
+
+        return $time;
     }
 
     protected function request($api)
@@ -91,6 +121,11 @@ class Api extends CI_Controller
 //        $domain['data'] = $result->data;
 
         return $result;
+    }
+
+    public function __destruct()
+    {
+        $this->dbh = null;
     }
 
 }
