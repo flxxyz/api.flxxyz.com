@@ -26,13 +26,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
- * @author	EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2017, British Columbia Institute of Technology (http://bcit.ca/)
- * @license	http://opensource.org/licenses/MIT	MIT License
- * @link	https://codeigniter.com
- * @since	Version 1.0.0
+ * @package    CodeIgniter
+ * @author    EllisLab Dev Team
+ * @copyright    Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
+ * @copyright    Copyright (c) 2014 - 2017, British Columbia Institute of Technology (http://bcit.ca/)
+ * @license    http://opensource.org/licenses/MIT	MIT License
+ * @link    https://codeigniter.com
+ * @since    Version 1.0.0
  * @filesource
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
@@ -43,54 +43,94 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * This class object is the super class that every library in
  * CodeIgniter will be assigned to.
  *
- * @package		CodeIgniter
- * @subpackage	Libraries
- * @category	Libraries
- * @author		EllisLab Dev Team
- * @link		https://codeigniter.com/user_guide/general/controllers.html
+ * @package        CodeIgniter
+ * @subpackage    Libraries
+ * @category    Libraries
+ * @author        EllisLab Dev Team
+ * @link        https://codeigniter.com/user_guide/general/controllers.html
  */
-class CI_Controller {
+class CI_Controller
+{
 
-	/**
-	 * Reference to the CI singleton
-	 *
-	 * @var	object
-	 */
-	private static $instance;
+    /**
+     * Reference to the CI singleton
+     *
+     * @var    object
+     */
+    private static $instance;
 
-	/**
-	 * Class constructor
-	 *
-	 * @return	void
-	 */
-	public function __construct()
-	{
-		self::$instance =& $this;
+    /**
+     * Class constructor
+     *
+     * @return    void
+     */
+    public function __construct()
+    {
+        self::$instance =& $this;
 
-		// Assign all the class objects that were instantiated by the
-		// bootstrap file (CodeIgniter.php) to local class variables
-		// so that CI can run as one big super object.
-		foreach (is_loaded() as $var => $class)
-		{
-			$this->$var =& load_class($class);
-		}
+        // Assign all the class objects that were instantiated by the
+        // bootstrap file (CodeIgniter.php) to local class variables
+        // so that CI can run as one big super object.
+        foreach ( is_loaded() as $var => $class ) {
+            $this->$var =& load_class($class);
+        }
 
-		$this->load =& load_class('Loader', 'core');
-		$this->load->initialize();
-		log_message('info', 'Controller Class Initialized');
-	}
+        $this->load =& load_class('Loader', 'core');
+        $this->load->initialize();
+        $this->load->helper('url');
+        ini_set('date.timezone', 'PRC');
+        //date_default_timezone_set('PRC');
+        log_message('info', 'Controller Class Initialized');
+    }
 
-	// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
-	/**
-	 * Get the CI singleton
-	 *
-	 * @static
-	 * @return	object
-	 */
-	public static function &get_instance()
-	{
-		return self::$instance;
-	}
+    /**
+     * Get the CI singleton
+     *
+     * @static
+     * @return    object
+     */
+    public static function &get_instance()
+    {
+        return self::$instance;
+    }
+
+    /**
+     * Return Data Structure (json/xml)
+     *
+     * @param array  $data
+     * @param string $encode
+     *
+     * @return string
+     */
+    public function dataStructure($data = [], $encode = 'json')
+    {
+        if ( $encode == 'xml' ) {
+            $keys1 = array_keys($data);
+
+            $str = '<?xml version="1.0" encoding="utf-8"?><data>';
+            $m = 0;
+            foreach ( $keys1 as $v1 ) {
+                if ( is_array($data[$v1]) ) {
+                    $keys2 = array_keys($data[$v1]);
+                    $str .= "<$v1>";
+                    foreach ( $keys2 as $v2 ) {
+                        $str .= "<$v2>" . $data[$v1][$v2] . "</$v2>";
+                    }
+                    $str .= "</$keys1[$m]>";
+                } else
+                    $str .= "<$v1>$data[$v1]</$v1>";
+                $m++;
+            }
+            $str .= '</data>';
+
+            header("content-type:application/xml;charset:utf-8;");
+            echo $str;
+        } else {
+            header("content-type:application/json;charset:utf-8;");
+            echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        }
+    }
 
 }
