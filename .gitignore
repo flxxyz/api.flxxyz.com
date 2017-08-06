@@ -9,6 +9,9 @@ application/cache/*
 application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
+application/views/Admin/
+application/controllers/Admin.php
+application/controllers/Api.php
 
 user_guide_src/build/*
 user_guide_src/cilexer/build/*
