@@ -840,3 +840,9 @@ if ( !function_exists('get') ) {
 
     }
 }
+
+if ( !function_exists('hostname') ) {
+    function hostname() {
+        return $_SERVER['HTTP_HOST'];
+    }
+}
