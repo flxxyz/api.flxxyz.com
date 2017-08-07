@@ -6,17 +6,17 @@
 <hr>
 <article>
     <h3>使用手册</h3>
-    <p>请求地址：<b>http://<?php echo hostname(); ?>/bing/api.php</b></p>
+    <p>请求地址：<b>(http://或https://)  <?php echo hostname(); ?>/bing/api</b></p>
     <p>请求类型: GET</p>
     <p>请求参数:
     <ul>
-        <li><span>t</span> 返回类型
+        <li><span>type</span> 返回类型
             <ul>
                 <li><span>url</span> 返回数据 【默认】</li>
                 <li><span>bg</span> 返回图片</li>
             </ul>
         </li>
-        <li><span>d</span> 选取某天
+        <li><span>day</span> 选取某天
             <ul>
                 <li><span>0</span> 返回明天数据</li>
                 <li><span>1</span> 今天 【默认】</li>
