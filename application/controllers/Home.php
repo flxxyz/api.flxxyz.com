@@ -21,6 +21,13 @@ class Home extends CI_Controller
             $data['protocol'] = 'https';
         }
 
-        return $this->load->view('Home/index', $data);
+        $this->load->view('Layout/header.php');
+        $this->load->view('Home/index', $data);
+        $this->load->view('Layout/footer.php', ['script' => '']);
+    }
+
+    public function test()
+    {
+        var_dump(get_config());
     }
 }

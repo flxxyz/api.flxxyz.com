@@ -13,7 +13,21 @@ class Bing extends CI_Controller
 
     public function index()
     {
-        //var_dump($this->uri->uri_to_assoc());
+        $hostname = hostname();
+        $script = <<<EOT
+    $(function () {
+        $('input.url').focus(function () {
+            $(this).select()
+        });
+        $('.btn').click(function () {
+            $('input.url').val($('.protocol').val() + "://{$hostname}/bing/api?type=" + $('.type').val() + "&encode=" + $('.version').val() + "&day=" + $('.day').val()).select()
+        })
+    })
+EOT;
+
+        $this->load->view('Layout/header.php');
+        $this->load->view('Bing/index.php');
+        $this->load->view('Layout/footer.php', ['script' => $script]);
     }
 
     public function api()
