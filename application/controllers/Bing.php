@@ -2,8 +2,8 @@
 
 class Bing extends CI_Controller
 {
-    public $id, $html;
-    protected $url;
+    public $id, $html, $encode;
+    protected $url = 'http://cn.bing.com/HPImageArchive.aspx?n=1&idx=[!ID]';
     protected $data;
 
     public function __construct()
@@ -11,6 +11,9 @@ class Bing extends CI_Controller
         parent::__construct();
     }
 
+    /**
+     * 首页
+     */
     public function index()
     {
         $hostname = hostname();
@@ -25,71 +28,68 @@ class Bing extends CI_Controller
     })
 EOT;
 
-        $this->load->view('Layout/header.php');
-        $this->load->view('Bing/index.php');
-        $this->load->view('Layout/footer.php', ['script' => $script]);
+        $this->load->view('Layout/header', [
+            'title' => 'Bing - API by Flxxyz.com',
+            'author' => 'Flxxyz',
+            'description' => '必应壁纸',
+            'keywords' => '必应壁纸,必应图片',
+        ]);
+        $this->load->view('Bing/index');
+        $this->load->view('Layout/footer', ['script' => $script]);
     }
 
+    /**
+     * 提供API接口服务
+     */
     public function api()
     {
         $type = get('type') ? get('type') : 'url';
-        $encode = get('encode') ? get('encode') : 'json';
+        $this->encode = get('encode') ? get('encode') : 'json';
         $this->id = get('day') ? get('day') : 1;
-        $this->url = 'http://cn.bing.com/HPImageArchive.aspx?n=1&idx=' . $this->id;
-        self::init($type, $encode);
+        $this->url = str_replace('[!ID]', $this->id, $this->url);
+
+        $this->init($type);
     }
 
-    protected function init($type, $encode)
+    /**
+     * 初始化
+     *
+     * @param $type
+     */
+    protected function init($type)
     {
-        $this->data = self::main();
+        $this->data = $this->main();
 
-        if ( $type == 'bg' ) {
-            self::showImage();
+        if ( $type === 'bg' ) {
+            showImage($this->data['imageurl']);
         } else {
-            $this->dataStructure($this->data, $encode);
+            $this->dataStructure($this->data, $this->encode);
         }
     }
 
+    /**
+     * 处理主体
+     * @return array
+     */
     protected function main()
     {
         $this->html = file_get_contents($this->url);
 
         return [
-            'startdate' => self::handleHtmlDate("/<startdate>(.+?)<\/startdate>/ies"),
-            'enddate' => self::handleHtmlDate("/<enddate>(.+?)<\/enddate>/ies"),
-            'imageurl' => 'http://cn.bing.com' . self::handleHtmlDate("/<url>(.+?)<\/url>/ies"),
-            'copyright' => self::handleHtmlDate("/<copyright>(.+?)<\/copyright>/ies")
+            'startdate' => $this->handleHtmlDate("/<startdate>(.+?)<\/startdate>/ies"),
+            'enddate' => $this->handleHtmlDate("/<enddate>(.+?)<\/enddate>/ies"),
+            'imageurl' => 'http://cn.bing.com' . $this->handleHtmlDate("/<url>(.+?)<\/url>/ies"),
+            'copyright' => $this->handleHtmlDate("/<copyright>(.+?)<\/copyright>/ies")
         ];
     }
 
-    protected function showImage()
-    {
-        $imgUrl = $this->data['imageurl'];
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $imgUrl);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_REFERER, $imgUrl);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36');
-        ob_start();
-        $return_content = ob_get_contents();
-        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $result = curl_exec($ch);
-        ob_end_clean();
-        curl_close($ch);
-        if ( !( $code != '404' && $result ) )
-            return false;
-
-        header('Content-Type: image/jpeg');
-        @ob_end_clean();
-        echo $result;
-        @ob_flush();
-        @flush();
-    }
-
+    /**
+     * 处理HTML数据
+     *
+     * @param $re
+     *
+     * @return string
+     */
     protected function handleHtmlDate($re)
     {
         $itemTxt = '';

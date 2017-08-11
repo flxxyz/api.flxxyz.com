@@ -1,12 +1,11 @@
-
 <header>
     <h1>必应壁纸 Bing</h1>
-    <span><a href="http://<?php echo hostname(); ?>">回到首页</a></span>
+    <span><a href="/">回到首页</a></span>
 </header><!-- header_end -->
 <hr>
 <article>
     <h3>使用手册</h3>
-    <p>请求地址：<b>(http://或https://)  <?php echo hostname(); ?>/bing/api</b></p>
+    <p>请求地址: <b>(http://或https://)  <?php echo hostname(); ?>/bing/api</b></p>
     <p>请求类型: GET</p>
     <p>请求参数:
     <ul>

@@ -21,7 +21,12 @@ class Home extends CI_Controller
             $data['protocol'] = 'https';
         }
 
-        $this->load->view('Layout/header.php');
+        $this->load->view('Layout/header', [
+            'title' => 'API by Flxxyz.com',
+            'author' => 'Flxxyz',
+            'description' => '希望各位大佬放过＞﹏＜，别做奇怪的事情',
+            'keywords' => '自用API,冯小贤,分享',
+        ]);
         $this->load->view('Home/index', $data);
         $this->load->view('Layout/footer.php', ['script' => '']);
     }

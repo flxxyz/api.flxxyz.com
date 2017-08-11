@@ -4,10 +4,10 @@ a {
 a:hover {
     color:#f00
 }
-a.protocol {
+a.protocol.http {
     color:#f00
 }
-a.protocol {
+a.protocol.https {
     color:#62d26d
 }
 .url {

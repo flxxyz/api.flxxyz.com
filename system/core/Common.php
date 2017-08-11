@@ -842,7 +842,98 @@ if ( !function_exists('get') ) {
 }
 
 if ( !function_exists('hostname') ) {
-    function hostname() {
+    function hostname()
+    {
         return $_SERVER['HTTP_HOST'];
+    }
+}
+
+if ( !function_exists('token') ) {
+    function token()
+    {
+        echo 'token';
+    }
+}
+
+if ( !function_exists('showImage') ) {
+    /**
+     * 展示URL图像
+     * @return binary
+     */
+    function showImage($url)
+    {
+        $imgUrl = $url;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $imgUrl);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_REFERER, $imgUrl);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36');
+        ob_start();
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $result = curl_exec($ch);
+        ob_end_clean();
+        curl_close($ch);
+        if ( !( $code != '404' && $result ) )
+            return false;
+
+        header('Content-Type: image/jpeg');
+        echo $result;
+    }
+}
+
+if ( !function_exists('getHttp') ) {
+    function getHttp($url) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_REFERER, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET' );
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36');
+        ob_start();
+        $code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+        $result = curl_exec($ch);
+        ob_end_clean();
+        curl_close($ch);
+        if($code != '404' && $result)
+            return $result;
+        else
+            return false;
+    }
+}
+
+if ( !function_exists('dataStructure') ) {
+    function dataStructure($data ,$encode = 'json' ) {
+        if($encode == 'xml') {
+            $keys1 = array_keys($data);
+
+            $str = '<?xml version="1.0" encoding="utf-8"?><DATA>';
+            $m = 0;
+            foreach($keys1 as $v1) {
+                if( is_array($data[$v1]) ) {
+                    $keys2 = array_keys($data[$v1]);
+                    $str .= "<$v1>";
+                    foreach($keys2 as $v2) {
+                        $str .= "<$v2>" . $data[$v1][$v2] . "</$v2>";
+                    }
+                    $str .= "</$keys1[$m]>";
+                }else
+                    $str .= "<$v1>$data[$v1]</$v1>";
+                $m++;
+            }
+            $str .= '</DATA>';
+
+            header("content-type:application/xml;charset:utf-8;");
+            return $str;
+        }else {
+            header("content-type:application/json;charset:utf-8;");
+            return json_encode($data ,JSON_UNESCAPED_UNICODE );
+        }
     }
 }

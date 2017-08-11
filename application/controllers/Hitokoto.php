@@ -1,11 +1,17 @@
 <?php
 
-class Hitokoto
+class Hitokoto extends CI_Controller
 {
-    public $data, $protocol, $encode;
+    public $protocol, $encode;
+    protected $data;
 
+    /**
+     * 首页
+     */
     public function index()
     {
+//        $protocol = is_https() ? 'https' : 'http';
+//        $url = base_url('/hitokoto/api', $protocol);
         $hostname = hostname();
         $script = <<<EOT
   $(function () {
@@ -17,11 +23,20 @@ class Hitokoto
         })
     })
 EOT;
-        $this->load->view('Layout/header.php');
-        $this->load->view('Hitokoto/index.php');
-        $this->load->view('Layout/footer.php', ['script' => $script]);
+
+        $this->load->view('Layout/header', [
+            'title' => 'Hitokoto - API by Flxxyz.com',
+            'author' => 'Flxxyz',
+            'description' => '分享一言，分享感动。',
+            'keywords' => '一言,一句话,ヒトコト,动漫语录,动漫,语录,动漫经典语录,经典动漫台词,ACG,冯小贤',
+        ]);
+        $this->load->view('Hitokoto/index');
+        $this->load->view('Layout/footer', ['script' => $script]);
     }
 
+    /**
+     * 提供API接口服务
+     */
     public function api()
     {
         $file = FCPATH . 'static/hitokoto.json';
@@ -33,6 +48,10 @@ EOT;
         echo self::init();
     }
 
+    /**
+     * 初始化
+     * @return string
+     */
     protected function init()
     {
         $data = $this->data;
@@ -45,41 +64,63 @@ EOT;
         return self::encode();
     }
 
+    /**
+     * 编码类型默认JSON
+     * @return string
+     */
     protected function encode()
     {
-        $data = $this->data;
-
         switch ($this->encode) {
             case 'xml':
-                return self::xml();
+                return $this->xml();
                 break;
             case 'js':
-                return self::js();
+                return $this->js();
+                break;
+            case 'json':
+                return $this->json();
                 break;
             default:
-                return self::json();
+                return $this->json();
                 break;
         }
     }
 
+    /**
+     * XML编码
+     * @return string
+     */
     protected function xml()
     {
         $data = $this->data;
 
-        return <<<EOT
+        header("content-type:application/xml;charset:utf-8;");
+        $str = <<<EOT
 <?xml version="1.0" encoding="utf-8"?>
-<data>
-  <id>{$data['id']}</id>
-  <hitokoto>{$data['hitokoto']}</hitokoto>
-  <cat>{$data['cat']}</cat>
-  <catname>{$data['catname']}</catname>
-  <author>{$data['author']}</author>
-  <source>{$data['source']}</source>
-  <date>{$data['date']}</date>
-</data>
+<DATA>
+  <id>[!ID]</id>
+  <hitokoto>[!HITOKOTO]</hitokoto>
+  <cat>[!CAT]</cat>
+  <catname>[!CATNAME]</catname>
+  <author>[!AUTHOR]</author>
+  <source>[!SOURCE]</source>
+  <date>[!DATE]</date>
+</DATA>
 EOT;
+        $str = str_replace('[!ID]', $data['id'], $str);
+        $str = str_replace('[!HITOKOTO]', $data['hitokoto'], $str);
+        $str = str_replace('[!CAT]', $data['cat'], $str);
+        $str = str_replace('[!CATNAME]', $data['catname'], $str);
+        $str = str_replace('[!AUTHOR]', $data['author'], $str);
+        $str = str_replace('[!SOURCE]', $data['source'], $str);
+        $str = str_replace('[!DATE]', $data['date'], $str);
+        return $str;
     }
 
+    /**
+     * JS编码
+     * @return string
+     */
     protected function js()
     {
         $data = $this->data;
@@ -88,6 +129,10 @@ EOT;
         return "var hitokoto = function(){document.getElementById('hitokoto').innerHTML='{$data['hitokoto']}'}";
     }
 
+    /**
+     * JSON编码
+     * @return string
+     */
     protected function json()
     {
         $data = $this->data;
