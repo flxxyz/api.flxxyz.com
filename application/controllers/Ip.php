@@ -11,11 +11,40 @@ class Ip extends CI_Controller
     public $encode, $source, $ip;
     protected $data;
 
+    /**
+     * 首页
+     */
     public function index()
     {
+        $hostname = hostname();
+        $script = <<<EOT
+$(function() {
+    $('input.url').focus(function() {
+        $(this).select()
+    });
+    $('.btn').click(function() {
+        var ip = $('input.ip').val();
+        if(ip === '') {
+            ip = 'self';
+        }
+        $('input.url').val($('.protocol').val()+"://{$hostname}/ip/api?ip="+ip+"&encode="+$('.encode').val()+"&source="+$('.source').val()).select()
+    })
+})
+EOT;
 
+        $this->load->view('Layout/header', [
+            'title' => 'IPQuery - API by Flxxyz.com',
+            'author' => 'Flxxyz',
+            'description' => 'IP查询',
+            'keywords' => '"IP查询,IP地址,ip',
+        ]);
+        $this->load->view('Ip/index');
+        $this->load->view('Layout/footer', ['script' => $script]);
     }
 
+    /**
+     * 提供API接口服务
+     */
     public function api()
     {
         $this->ip = $this->checkIp();
@@ -23,9 +52,12 @@ class Ip extends CI_Controller
         $this->encode = get('encode') ? get('encode') : 'json';
 
         echo $this->init();
-        //echo $this->init();
     }
 
+    /**
+     * 检测IP
+     * @return mixed|string
+     */
     protected function checkIp()
     {
         if ( get('ip') === 'self' ) {
@@ -37,24 +69,31 @@ class Ip extends CI_Controller
         }
     }
 
+    /**
+     * 初始化
+     * @return string
+     */
     protected function init()
     {
-        $this->optSource();
+        $this->source();
 
         switch ($this->encode) {
             case 'xml':
-                return dataStructure($this->data, 'xml');
+                return $this->dataStructure($this->data, 'xml');
                 break;
             case 'json':
-                return dataStructure($this->data, 'json');
+                return $this->dataStructure($this->data, 'json');
                 break;
             default:
-                return dataStructure($this->data, 'json');
+                return $this->dataStructure($this->data, 'json');
                 break;
         }
     }
 
-    protected function optSource()
+    /**
+     * IP查询源选择
+     */
+    protected function source()
     {
         switch ($this->source) {
             case 'taobao':
@@ -63,9 +102,19 @@ class Ip extends CI_Controller
             case 'baidu':
                 $this->data = $this->baidu();
                 break;
+            case 'aliyun':
+                $this->data = $this->aliyun();
+                break;
+            default:
+                $this->data = $this->baidu();
+                break;
         }
     }
 
+    /**
+     * 百度源
+     * @return array
+     */
     protected function baidu()
     {
         $url = 'https://sp0.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php?query=[!IP]&resource_id=6006&ie=utf8&oe=utf8&format=json';
@@ -74,16 +123,74 @@ class Ip extends CI_Controller
         $obj = json_decode($html);
         return [
             'location' => $obj->data[0]->location,
-            'origip' => $obj->data[0]->origip,
+            'query_ip' => $obj->data[0]->origip,
         ];
     }
 
+    /**
+     * 淘宝源
+     * @return array
+     */
     protected function taobao()
     {
         $url = 'http://ip.taobao.com//service/getIpInfo.php?ip=[!IP]';
         $url = str_replace('[!IP]', $this->ip, $url);
         $json = getHttp($url);
         $obj = json_decode($json);
-        return $obj;
+        return [
+            'location' => $obj->data->country . $obj->data->region . $obj->data->city . $obj->data->isp,
+            'query_ip' => $obj->data->ip,
+        ];
+    }
+
+    /**
+     * 阿里云API源（需购买IP的API服务）
+     * @return array
+     */
+    protected function aliyun()
+    {
+        $appcode = "";  // 你自己的AppCode
+        if ( $appcode === '' ) {
+            return [
+                'location' => '秒天秒地秒空气',
+                'query_ip' => $this->ip,
+            ];
+        }
+
+        $host = "http://jisuip.market.alicloudapi.com";
+        $path = "/ip/location";
+        $method = "GET";
+        $headers = [];
+        array_push($headers, "Authorization:APPCODE " . $appcode);
+        $querys = str_replace('[!IP]', $this->ip, "ip=[!IP]");
+        $bodys = "";
+        $url = $host . $path . "?" . $querys;
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_FAILONERROR, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        if ( 1 == strpos("$" . $host, "https://") ) {
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        }
+
+        $result = curl_exec($curl);
+        curl_close($curl);
+        $obj = json_decode($result);
+
+        if ( $obj->result->province === '未分配或者内网IP' ) {
+            $location = $obj->result->province;
+        } else {
+            $location = $obj->result->country . $obj->result->province . $obj->result->city . $obj->result->type;
+        }
+
+        return [
+            'location' => $location,
+            'query_ip' => $obj->result->ip,
+        ];
     }
 }
