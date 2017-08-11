@@ -31,6 +31,9 @@ class Miaopai extends CI_Controller
         'vend' => ''
     ];
 
+    /**
+     * 首页
+     */
     public function index()
     {
         echo 'miaopai';
@@ -53,6 +56,9 @@ class Miaopai extends CI_Controller
         echo $this->dataStructure($this->data);
     }
 
+    /**
+     * 检测URL
+     */
     protected function checkUrl() {
         if(get('url') === '') {
             header('content-type: application/json;');
