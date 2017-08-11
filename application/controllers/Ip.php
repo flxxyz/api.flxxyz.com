@@ -11,11 +11,13 @@ class Ip extends CI_Controller
     public $encode, $source, $ip;
     protected $data;
 
-    public function index() {
+    public function index()
+    {
 
     }
 
-    public function api() {
+    public function api()
+    {
         $this->ip = $this->checkIp();
         $this->source = get('source') ? get('source') : 'baidu';
         $this->encode = get('encode') ? get('encode') : 'json';
@@ -24,18 +26,19 @@ class Ip extends CI_Controller
         //echo $this->init();
     }
 
-
-    protected function checkIp() {
-        if(get('ip') === 'self') {
+    protected function checkIp()
+    {
+        if ( get('ip') === 'self' ) {
             return get_client_ip();
-        }else if(get('ip') !== '') {
+        } else if ( get('ip') !== '' ) {
             return get('ip');
-        }else {
+        } else {
             return '0.0.0.0';
         }
     }
 
-    protected function init() {
+    protected function init()
+    {
         $this->optSource();
 
         switch ($this->encode) {
@@ -51,7 +54,8 @@ class Ip extends CI_Controller
         }
     }
 
-    protected function optSource() {
+    protected function optSource()
+    {
         switch ($this->source) {
             case 'taobao':
                 $this->data = $this->taobao();
@@ -62,7 +66,8 @@ class Ip extends CI_Controller
         }
     }
 
-    protected function baidu() {
+    protected function baidu()
+    {
         $url = 'https://sp0.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php?query=[!IP]&resource_id=6006&ie=utf8&oe=utf8&format=json';
         $url = str_replace('[!IP]', $this->ip, $url);
         $html = getHttp($url);
@@ -73,7 +78,8 @@ class Ip extends CI_Controller
         ];
     }
 
-    protected function taobao() {
+    protected function taobao()
+    {
         $url = 'http://ip.taobao.com//service/getIpInfo.php?ip=[!IP]';
         $url = str_replace('[!IP]', $this->ip, $url);
         $json = getHttp($url);

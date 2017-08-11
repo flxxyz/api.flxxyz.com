@@ -10,8 +10,6 @@ class Hitokoto extends CI_Controller
      */
     public function index()
     {
-//        $protocol = is_https() ? 'https' : 'http';
-//        $url = base_url('/hitokoto/api', $protocol);
         $hostname = hostname();
         $script = <<<EOT
   $(function () {

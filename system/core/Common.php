@@ -908,32 +908,3 @@ if ( !function_exists('getHttp') ) {
     }
 }
 
-if ( !function_exists('dataStructure') ) {
-    function dataStructure($data ,$encode = 'json' ) {
-        if($encode == 'xml') {
-            $keys1 = array_keys($data);
-
-            $str = '<?xml version="1.0" encoding="utf-8"?><DATA>';
-            $m = 0;
-            foreach($keys1 as $v1) {
-                if( is_array($data[$v1]) ) {
-                    $keys2 = array_keys($data[$v1]);
-                    $str .= "<$v1>";
-                    foreach($keys2 as $v2) {
-                        $str .= "<$v2>" . $data[$v1][$v2] . "</$v2>";
-                    }
-                    $str .= "</$keys1[$m]>";
-                }else
-                    $str .= "<$v1>$data[$v1]</$v1>";
-                $m++;
-            }
-            $str .= '</DATA>';
-
-            header("content-type:application/xml;charset:utf-8;");
-            return $str;
-        }else {
-            header("content-type:application/json;charset:utf-8;");
-            return json_encode($data ,JSON_UNESCAPED_UNICODE );
-        }
-    }
-}
