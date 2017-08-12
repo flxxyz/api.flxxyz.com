@@ -2,7 +2,7 @@
 
 class Hitokoto extends CI_Controller
 {
-    public $protocol, $encode;
+    public $protocol, $encode = 'json';
     protected $data;
 
     /**

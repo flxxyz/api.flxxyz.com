@@ -8,7 +8,7 @@
 
 class Miaopai extends CI_Controller
 {
-    public $base64, $url;
+    public $base64, $url, $encode = 'json';
     protected $download, $info;
     protected $data = [
         'nickInfo' => [
@@ -44,16 +44,15 @@ class Miaopai extends CI_Controller
      */
     public function api()
     {
-        $this->checkUrl();
-
+        $this->encode = get('encode') ? get('encode') : 'json';
         $this->base64 = str_replace(".htm", "", str_replace("http://www.miaopai.com/show/", "", $this->url));
 
+        $this->checkUrl();
+
         $this->init();
-
         $this->handle();
-
-        //var_dump($this->info);
-        echo $this->dataStructure($this->data);
+//        var_dump();
+        echo $this->encode();
     }
 
     /**
@@ -61,8 +60,8 @@ class Miaopai extends CI_Controller
      */
     protected function checkUrl() {
         if(get('url') === '') {
-            header('content-type: application/json;');
-            exit(json_encode($this->data));
+            exit($this->dataStructure($this->data, $this->encode));
+            //exit(json_encode($this->data));
         }else {
             $this->url = get('url');
         }
@@ -84,6 +83,14 @@ class Miaopai extends CI_Controller
 
         $this->download = $tmp_download;
         $this->info = $tmp_info;
+    }
+
+    /**
+     * 编码类型默认JSON
+     * @return string
+     */
+    protected function encode() {
+        return $this->dataStructure($this->data, $this->encode);
     }
 
     /**

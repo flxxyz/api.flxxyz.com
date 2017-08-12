@@ -109,7 +109,7 @@ class CI_Controller
         if ( $encode == 'xml' ) {
             $keys1 = array_keys($data);
 
-            $str = '<?xml version="1.0" encoding="utf-8"?><data>';
+            $str = '<?xml version="1.0" encoding="utf-8"?><DATA>';
             $m = 0;
             foreach ( $keys1 as $v1 ) {
                 if ( is_array($data[$v1]) ) {
@@ -123,13 +123,14 @@ class CI_Controller
                     $str .= "<$v1>$data[$v1]</$v1>";
                 $m++;
             }
-            $str .= '</data>';
+            $str .= '</DATA>';
 
-            header("content-type:application/xml;charset:utf-8;");
-            echo $str;
+            //echo '<pre>';
+            header("content-type:application/xml;charset:utf-8");
+            return $str;
         } else {
-            header("content-type:application/json;charset:utf-8;");
-            echo json_encode($data, JSON_UNESCAPED_UNICODE);
+            header("content-type:application/json;charset:utf-8");
+            return json_encode($data, JSON_UNESCAPED_UNICODE);
         }
     }
 

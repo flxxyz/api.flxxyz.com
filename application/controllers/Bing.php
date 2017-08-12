@@ -63,7 +63,7 @@ EOT;
         if ( $type === 'bg' ) {
             showImage($this->data['imageurl']);
         } else {
-            $this->dataStructure($this->data, $this->encode);
+            echo $this->dataStructure($this->data, $this->encode);
         }
     }
 
