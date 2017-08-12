@@ -122,6 +122,7 @@ EOT;
         $html = getHttp($url);
         $obj = json_decode($html);
         return [
+            'source' => $this->source,
             'location' => $obj->data[0]->location,
             'query_ip' => $obj->data[0]->origip,
         ];
@@ -138,6 +139,7 @@ EOT;
         $json = getHttp($url);
         $obj = json_decode($json);
         return [
+            'source' => $this->source,
             'location' => $obj->data->country . $obj->data->region . $obj->data->city . $obj->data->isp,
             'query_ip' => $obj->data->ip,
         ];
@@ -152,6 +154,7 @@ EOT;
         $appcode = "";  // 你自己的AppCode
         if ( $appcode === '' ) {
             return [
+                'source' => $this->source,
                 'location' => '秒天秒地秒空气',
                 'query_ip' => $this->ip,
             ];
@@ -189,6 +192,7 @@ EOT;
         }
 
         return [
+            'source' => $this->source,
             'location' => $location,
             'query_ip' => $obj->result->ip,
         ];
