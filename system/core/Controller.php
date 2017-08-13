@@ -110,7 +110,6 @@ class CI_Controller
             $keys1 = array_keys($data);
 
             $str = '<?xml version="1.0" encoding="utf-8"?><DATA>';
-            $m = 0;
             foreach ( $keys1 as $v1 ) {
                 if ( is_array($data[$v1]) ) {
                     $keys2 = array_keys($data[$v1]);
@@ -118,14 +117,13 @@ class CI_Controller
                     foreach ( $keys2 as $v2 ) {
                         $str .= "<$v2>" . $data[$v1][$v2] . "</$v2>";
                     }
-                    $str .= "</$keys1[$m]>";
-                } else
+                    $str .= "</$v1>";
+                } else {
                     $str .= "<$v1>$data[$v1]</$v1>";
-                $m++;
+                }
             }
             $str .= '</DATA>';
 
-            //echo '<pre>';
             header("content-type:application/xml;charset:utf-8");
             return $str;
         } else {

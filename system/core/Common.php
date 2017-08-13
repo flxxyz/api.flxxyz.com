@@ -841,6 +841,28 @@ if ( !function_exists('get') ) {
     }
 }
 
+if ( !function_exists('post') ) {
+    /**
+     * 返回POST方法的值
+     *
+     * @param $name
+     *
+     * @return mixed
+     */
+    function post($name)
+    {
+        if ( empty($_POST[$name]) === '0' )
+            return '';
+        else if ( @$_POST[$name] == 'false' )
+            return '';
+        else if ( @$_POST[$name] == 'true' )
+            return '';
+        else
+            return @$_POST[$name] ? $_POST[$name] : '';
+
+    }
+}
+
 if ( !function_exists('hostname') ) {
     function hostname()
     {
