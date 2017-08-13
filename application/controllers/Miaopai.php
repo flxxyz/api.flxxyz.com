@@ -8,7 +8,7 @@
 
 class Miaopai extends CI_Controller
 {
-    public $base64, $url, $encode = 'json';
+    public $base64, $url;
     protected $download, $info;
     protected $data = [
         'nickInfo' => [
@@ -24,7 +24,7 @@ class Miaopai extends CI_Controller
             'height' => '',
             'pic' => '',
             'download' => '',
-            'dowmloadbak' => ''
+            'dowmloadBak' => ''
         ],
         't' => '',
         'ft' => '',
@@ -36,7 +36,32 @@ class Miaopai extends CI_Controller
      */
     public function index()
     {
-        echo 'miaopai';
+        $hostname = hostname();
+        $script = <<<EOT
+$(function() {
+    $('input.url').focus(function() {
+        $(this).select()
+    });
+    $('.btn').click(function() {
+        var miaopai = $('.miaopai').val();
+        if(!miaopai) {
+            alert('请输入秒怕视频网址');
+            return;
+        }
+        $('input.url').val($('.protocol').val()+"://{$hostname}/miaopai/api?url="+miaopai).select()
+    })
+})
+EOT;
+
+        $this->load->view('Layout/header', [
+            'title' => 'Miaopai - API by Flxxyz.com',
+            'author' => 'Flxxyz',
+            'description' => '秒拍视频API',
+            'keywords' => '秒拍,秒拍视频,秒拍视频解析,秒拍API,api,秒拍视频API',
+            'css' => '.miaopai { width: 600px }',
+        ]);
+        $this->load->view('Miaopai/index');
+        $this->load->view('Layout/footer', ['script' => $script]);
     }
 
     /**
@@ -44,15 +69,13 @@ class Miaopai extends CI_Controller
      */
     public function api()
     {
-        $this->encode = get('encode') ? get('encode') : 'json';
-        $this->base64 = str_replace(".htm", "", str_replace("http://www.miaopai.com/show/", "", $this->url));
+        error_reporting(0);
 
         $this->checkUrl();
+        $this->base64 = str_replace(".htm", "", str_replace("http://www.miaopai.com/show/", "", $this->url));
 
         $this->init();
-        $this->handle();
-//        var_dump();
-        echo $this->encode();
+        echo $this->handle();
     }
 
     /**
@@ -60,8 +83,7 @@ class Miaopai extends CI_Controller
      */
     protected function checkUrl() {
         if(get('url') === '') {
-            exit($this->dataStructure($this->data, $this->encode));
-            //exit(json_encode($this->data));
+            exit($this->dataStructure($this->data));
         }else {
             $this->url = get('url');
         }
@@ -79,18 +101,9 @@ class Miaopai extends CI_Controller
 
         $tmp_download = json_decode(file_get_contents($api_url_download));
         $tmp_info = json_decode(file_get_contents($api_url_info));
-        //var_dump($tmp_info);
 
         $this->download = $tmp_download;
         $this->info = $tmp_info;
-    }
-
-    /**
-     * 编码类型默认JSON
-     * @return string
-     */
-    protected function encode() {
-        return $this->dataStructure($this->data, $this->encode);
     }
 
     /**
@@ -114,10 +127,12 @@ class Miaopai extends CI_Controller
         $this->data['videoInfo']['height'] = $j->ext->h;
         $this->data['videoInfo']['pic'] = $j->pic->base . $j->pic->m;
         $this->data['videoInfo']['download'] = $i[0]->scheme . $i[0]->host . $i[0]->path;
-        $this->data['videoInfo']['dowmloadbak'] = $i[1]->scheme . $i[1]->host . $i[1]->path;
+        $this->data['videoInfo']['dowmloadBak'] = $i[1]->scheme . $i[1]->host . $i[1]->path;
 
         $this->data['t'] = $j->ext->t;
         $this->data['ft'] = $j->ext->ft;
         $this->data['vend'] = $j->ext2->vend;
+
+        return $this->dataStructure($this->data);
     }
 }

@@ -1,18 +1,16 @@
 <header>
-    <h1>一言 Hitokoto</h1>
+    <h1>秒拍 Miaopai</h1>
     <span><a href="/">回到首页</a></span>
 </header><!-- header_end --><hr>
 <article>
     <h3>使用手册</h3>
-    <p>请求地址: <b>(http://或https://)  <?php echo hostname(); ?>/hitokoto/api</b></p>
+    <p>请求地址: <b>(http://或https://)  <?php echo hostname(); ?>/miaopai/api</b></p>
     <p>请求类型: GET</p>
     <p>请求参数:
     <ul>
-        <li><span>encode</span>
+        <li><span>url</span>
             <ul>
-                <li><span>json</span> 返回JSON格式数据 【默认】</li>
-                <li><span>xml</span> 返回XML格式数据</li>
-                <li><span>js</span> 返回函数名为hitokoto的JavaScript脚本</li>
+                <li><span>秒拍视频的网址</span></li>
             </ul>
         </li>
     </ul>
@@ -27,13 +25,8 @@
                 </select>
             </section>
             <section>
-                <label>数据格式:</label>
-                <select class="version">
-                    <option value="js">js</option>
-                    <option value="json" selected>json</option>
-                    <option value="xml">xml</option>}
-                    option
-                </select>
+                <label>秒拍视频地址:</label>
+                <input class="miaopai" type="url" placeholder="如：http://www.miaopai.com/show/zeepmhJos0atV3QuRA2Pbm5-c8RFSHlc.htm">
             </section>
             <section>
                 <button class="btn" type="button">提取</button>

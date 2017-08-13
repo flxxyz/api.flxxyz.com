@@ -5,7 +5,7 @@
 <article>
     <h3>使用手册</h3>
     <p>请求地址: <b>(http://或https://)  <?php echo hostname(); ?>/qq/api</b></p>
-    <p>请求类型: GET</p>
+    <p>请求类型: POST</p>
     <p>请求参数:
     <ul>
         <li><span>qq</span> QQ号码</li>
@@ -49,7 +49,7 @@
                 </select>
             </section>
             <section>
-                <button class="btn" type="button">获取头像</button>
+                <button class="btn" type="button">获取加密头像</button>
             </section>
         </section>
         <section class="result">
