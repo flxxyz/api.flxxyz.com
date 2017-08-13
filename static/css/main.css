@@ -28,3 +28,6 @@ li span {
     display:inline-block;
     padding-right:20px
 }
+section.result+section {
+    color: #cd5c5c
+}

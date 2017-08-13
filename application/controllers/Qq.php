@@ -41,7 +41,9 @@ $(function() {
             	size: $('select.size').val()
             },
             success: function(res) {
-                $('input.url').val(res.url).select()
+                $('input.url').val(res.url).select();
+                var showIcon = $('<img>').attr('src', res.url);
+                $('.result').next().html(showIcon);
             }
         })
     })
@@ -54,7 +56,7 @@ EOT;
             'description' => '加密链接内QQ号，不用烦恼如何隐藏链接里的QQ号辣~',
             'keywords' => 'QQ头像解析,加密QQ头像连接,加密,QQ,qlogoK值',
         ]);
-        $this->load->view('QQ/index');
+        $this->load->view('QQ/index', ['number' => $this->db->like('type', 'qq')->count_all_results('monitor')]);
         $this->load->view('Layout/footer', ['script' => $script]);
     }
 
@@ -88,6 +90,8 @@ EOT;
             ];
         }
 
+        $this->db->set($this->monitor('qq'));
+        $this->db->like('type', 'qq')->insert('monitor');
         echo json_encode($arr);
     }
 

@@ -33,6 +33,11 @@ class Home extends CI_Controller
 
     public function test()
     {
-        var_dump(get_config());
+        //phpinfo();
+        //$query = $this->db->like('type', 'bing')->count_all_results('monitor');
+
+        $this->db->set($this->monitor('bing'));
+        $query = $this->db->like('type', 'bing')->insert('monitor');
+        var_dump($query);
     }
 }

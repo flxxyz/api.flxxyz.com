@@ -27,7 +27,28 @@ $(function() {
         if(ip === '') {
             ip = 'self';
         }
-        $('input.url').val($('.protocol').val()+"://{$hostname}/ip/api?ip="+ip+"&encode="+$('.encode').val()+"&source="+$('.source').val()).select()
+        var encode = $('.encode').val();
+        $('input.url').val($('.protocol').val()+"://{$hostname}/ip/api?ip="+ip+"&encode="+encode+"&source="+$('.source').val()).select()
+        $.ajax({
+            url: $('input.url').val(),
+            dataType: encode,
+            success: function(result) {
+                switch(encode) {
+                    case 'xml':
+                        var code = $('<code></code>').text(FormatHTML('<DATA>'+$(result).find('DATA').html()+'<DATA>'));
+                        $('.result').next().find('pre').html(code);
+                        break;
+                    case 'js':
+                        var code = result;
+                        $('.result').next().find('pre').html(code);
+                        break;
+                    case 'json':
+                        var code = FormatJson(result);
+                        $('.result').next().find('pre').html(code);
+                        break;
+                }
+            }
+          });
     })
 })
 EOT;
@@ -38,7 +59,7 @@ EOT;
             'description' => 'IP查询',
             'keywords' => 'IP查询,IP地址,ip',
         ]);
-        $this->load->view('Ip/index');
+        $this->load->view('Ip/index', ['number' => $this->db->like('type', 'ip')->count_all_results('monitor')]);
         $this->load->view('Layout/footer', ['script' => $script]);
     }
 
@@ -53,6 +74,8 @@ EOT;
         $this->source = get('source') ? get('source') : 'baidu';
         $this->encode = get('encode') ? get('encode') : 'json';
 
+        $this->db->set($this->monitor('ip'));
+        $this->db->like('type', 'ip')->insert('monitor');
         echo $this->init();
     }
 
@@ -193,6 +216,8 @@ EOT;
             $location = $obj->result->country . $obj->result->province . $obj->result->city . $obj->result->type;
         }
 
+        $this->db->set($this->monitor('ip-aliyun'));
+        $this->db->like('type', 'ip-aliyun')->insert('monitor');
         return [
             'source' => $this->source,
             'location' => $location,

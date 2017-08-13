@@ -48,7 +48,11 @@ $(function() {
             alert('请输入秒怕视频网址');
             return;
         }
-        $('input.url').val($('.protocol').val()+"://{$hostname}/miaopai/api?url="+miaopai).select()
+        $('input.url').val($('.protocol').val()+"://{$hostname}/miaopai/api?url="+miaopai).select();
+        $.getJSON($('input.url').val(), function(result) {
+            var code = FormatJson(result);
+            $('.result').next().find('pre').html(code);
+        });
     })
 })
 EOT;
@@ -60,7 +64,7 @@ EOT;
             'keywords' => '秒拍,秒拍视频,秒拍视频解析,秒拍API,api,秒拍视频API',
             'css' => '.miaopai { width: 600px }',
         ]);
-        $this->load->view('Miaopai/index');
+        $this->load->view('Miaopai/index', ['number' => $this->db->like('type', 'miaopai')->count_all_results('monitor')]);
         $this->load->view('Layout/footer', ['script' => $script]);
     }
 
@@ -75,16 +79,19 @@ EOT;
         $this->base64 = str_replace(".htm", "", str_replace("http://www.miaopai.com/show/", "", $this->url));
 
         $this->init();
+        $this->db->set($this->monitor('miaopai'));
+        $this->db->like('type', 'miaopai')->insert('monitor');
         echo $this->handle();
     }
 
     /**
      * 检测URL
      */
-    protected function checkUrl() {
-        if(get('url') === '') {
+    protected function checkUrl()
+    {
+        if ( get('url') === '' ) {
             exit($this->dataStructure($this->data));
-        }else {
+        } else {
             $this->url = get('url');
         }
     }

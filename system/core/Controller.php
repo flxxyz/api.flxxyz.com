@@ -80,6 +80,8 @@ class CI_Controller
         $this->load->helper('url');
         ini_set('date.timezone', 'PRC');
         //date_default_timezone_set('PRC');
+        $dsn = 'mysqli://homestead:secret@127.0.0.1/api_dev';
+        $this->load->database($dsn);
         log_message('info', 'Controller Class Initialized');
     }
 
@@ -130,6 +132,19 @@ class CI_Controller
             header("content-type:application/json;charset:utf-8");
             return json_encode($data, JSON_UNESCAPED_UNICODE);
         }
+    }
+
+    public function monitor($type) {
+        $ip = get_client_ip();
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+        $request_time = $_SERVER['REQUEST_TIME'];
+
+        return [
+            'ip' => $ip,
+            'user_agent' => $user_agent,
+            'time' => $request_time,
+            'type' => $type
+        ];
     }
 
 }

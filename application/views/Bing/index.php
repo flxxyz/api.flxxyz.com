@@ -43,7 +43,7 @@
             </section>
             <section>
                 <label>数据格式:</label>
-                <select class="version">
+                <select class="encode">
                     <option value="json" selected>json</option>
                     <option value="xml">xml</option>
                 </select>
@@ -80,5 +80,6 @@
             <hr>
             <input type="text" class="url" value="" placeholder="返回结果:"/>
         </section>
+        <section></section>
     </form>
 </article><!-- article_end -->

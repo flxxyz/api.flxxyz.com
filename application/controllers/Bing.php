@@ -23,7 +23,31 @@ class Bing extends CI_Controller
             $(this).select()
         });
         $('.btn').click(function () {
-            $('input.url').val($('.protocol').val() + "://{$hostname}/bing/api?type=" + $('.type').val() + "&encode=" + $('.version').val() + "&day=" + $('.day').val()).select()
+            var type = $('.type').val();
+            var encode = $('.encode').val();
+            $('input.url').val($('.protocol').val() + "://{$hostname}/bing/api?type=" + type + "&encode=" + encode + "&day=" + $('.day').val()).select()
+            if(type == 'url') {
+                $.ajax({
+                    url: $('input.url').val(),
+                    dataType: encode,
+                    success: function(result) {
+                        $('.result').next().html($('<pre></pre>'));
+                        switch(encode) {
+                            case 'xml':
+                                var code = $('<code></code>').text(FormatHTML('<DATA>'+$(result).find('DATA').html()+'<DATA>'));
+                                $('.result').next().find('pre').html(code);
+                                break;
+                            case 'json':
+                                var code = FormatJson(result);
+                                $('.result').next().find('pre').html(code);
+                                break;
+                        }
+                    }
+                });
+            }else {
+                var showIcon = $('<img>').attr('src', $('input.url').val());
+                $('.result').next().html(showIcon);
+            }
         })
     })
 EOT;
@@ -34,7 +58,7 @@ EOT;
             'description' => '必应壁纸',
             'keywords' => '必应壁纸,必应图片',
         ]);
-        $this->load->view('Bing/index');
+        $this->load->view('Bing/index', ['number' => $this->db->like('type', 'bing')->count_all_results('monitor')]);
         $this->load->view('Layout/footer', ['script' => $script]);
     }
 
@@ -48,6 +72,8 @@ EOT;
         $this->id = get('day') ? get('day') : 1;
         $this->url = str_replace('[!ID]', $this->id, $this->url);
 
+        $this->db->set($this->monitor('bing'));
+        $this->db->like('type', 'bing')->insert('monitor');
         $this->init($type);
     }
 

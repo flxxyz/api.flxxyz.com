@@ -13,11 +13,35 @@ class Hitokoto extends CI_Controller
         $hostname = hostname();
         $script = <<<EOT
   $(function () {
-      $('input.url') . focus(function () {
-        $(this) . select()
+      $('input.url').focus(function () {
+        $(this).select()
         });
-      $('.btn') . click(function () {
-          $('input.url') . val($('.protocol') . val() + "://{$hostname}/hitokoto/api?encode=" + $('.encode') . val()) . select();
+      $('.btn').click(function () {
+          var encode = $('.encode').val();
+          $('input.url').val($('.protocol').val() + "://{$hostname}/hitokoto/api?encode=" + encode).select();
+          if($('.encode').val() === 'js') {
+            encode = 'text';
+          }
+          $.ajax({
+            url: $('input.url').val(),
+            dataType: encode,
+            success: function(result) {
+                switch(encode) {
+                    case 'xml':
+                        var code = $('<code></code>').text(FormatHTML('<DATA>'+$(result).find('DATA').html()+'<DATA>'));
+                        $('.result').next().find('pre').html(code);
+                        break;
+                    case 'text':
+                        var code = result;
+                        $('.result').next().find('pre').html(code);
+                        break;
+                    case 'json':
+                        var code = FormatJson(result);
+                        $('.result').next().find('pre').html(code);
+                        break;
+                }
+            }
+          });
         })
     })
 EOT;
@@ -28,7 +52,7 @@ EOT;
             'description' => '分享一言，分享感动。',
             'keywords' => '一言,一句话,ヒトコト,动漫语录,动漫,语录,动漫经典语录,经典动漫台词,ACG,冯小贤',
         ]);
-        $this->load->view('Hitokoto/index');
+        $this->load->view('Hitokoto/index', ['number' => $this->db->like('type', 'hitokoto')->count_all_results('monitor')]);
         $this->load->view('Layout/footer', ['script' => $script]);
     }
 
@@ -43,7 +67,9 @@ EOT;
         $this->protocol = is_https() ? 'https' : 'http';
         $this->encode = get('encode');
 
-        echo self::init();
+        $this->db->set($this->monitor('hitokoto'));
+        $this->db->like('type', 'hitokoto')->insert('monitor');
+        echo $this->init();
     }
 
     /**
@@ -59,7 +85,7 @@ EOT;
             exit('{"id":"","hitokoto":"","cat":"","catname":"","author":"","source":"","date":""}');
         }
 
-        return self::encode();
+        return $this->encode();
     }
 
     /**

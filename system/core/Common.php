@@ -930,3 +930,8 @@ if ( !function_exists('getHttp') ) {
     }
 }
 
+if ( !function_exists('getProtocol') ) {
+    function getProtocol() {
+        return is_https() ? 'https' : 'http';
+    }
+}
