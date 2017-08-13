@@ -12,8 +12,6 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
-		"guzzlehttp/guzzle": "^5.1",
-		"cloudxns/cloud-xns-api-sdk-php": "^1.0"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
