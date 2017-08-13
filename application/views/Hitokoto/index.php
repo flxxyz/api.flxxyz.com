@@ -28,11 +28,10 @@
             </section>
             <section>
                 <label>数据格式:</label>
-                <select class="version">
+                <select class="encode">
                     <option value="js">js</option>
                     <option value="json" selected>json</option>
-                    <option value="xml">xml</option>}
-                    option
+                    <option value="xml">xml</option>
                 </select>
             </section>
             <section>

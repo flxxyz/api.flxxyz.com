@@ -33,7 +33,7 @@ $(function() {
         }
         $.ajax({
             url: '{$url}',
-            type: 'get',
+            type: 'post',
             dataType: 'json',
             data: {
             	qq: qq.val(),
@@ -61,7 +61,7 @@ EOT;
     public function api()
     {
         // 获取QQ号，否则默认
-        $this->qq = get('qq') ? get('qq') : '10000';
+        $this->qq = post('qq') ? post('qq') : '10000';
         $this->protocol = $this->protocol();
         $this->size = $this->size();
 
@@ -96,7 +96,7 @@ EOT;
      */
     protected function protocol() {
         $allProtocol = ['http', 'https'];
-        return in_array(get('protocol'), $allProtocol) ? get('protocol') : 'http';
+        return in_array(post('protocol'), $allProtocol) ? post('protocol') : 'http';
     }
 
     /**
@@ -104,7 +104,7 @@ EOT;
      */
     protected function size() {
         $allSize = ['40', '100', '140', '160'];
-        return in_array(get('size'), $allSize) ? get('size') : '100';
+        return in_array(post('size'), $allSize) ? post('size') : '100';
     }
 
     protected function mx($base = true)
@@ -124,9 +124,9 @@ EOT;
     {
         $this->qq = $qq;
         $size = get('size') ? get('size') : '100';
-        $this->qq = $this->mx(false);
+        $qq = $this->mx(false);
 
-        $url = "http://q.qlogo.cn/headimg_dl?dst_uin=$this->qq&spec=$size";
+        $url = "http://q.qlogo.cn/headimg_dl?dst_uin=$qq&spec=$size";
         //echo $url;
 
         showImage($url);

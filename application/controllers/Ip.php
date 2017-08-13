@@ -36,7 +36,7 @@ EOT;
             'title' => 'IPQuery - API by Flxxyz.com',
             'author' => 'Flxxyz',
             'description' => 'IP查询',
-            'keywords' => '"IP查询,IP地址,ip',
+            'keywords' => 'IP查询,IP地址,ip',
         ]);
         $this->load->view('Ip/index');
         $this->load->view('Layout/footer', ['script' => $script]);
@@ -47,6 +47,8 @@ EOT;
      */
     public function api()
     {
+        error_reporting(0);
+
         $this->ip = $this->checkIp();
         $this->source = get('source') ? get('source') : 'baidu';
         $this->encode = get('encode') ? get('encode') : 'json';

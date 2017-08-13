@@ -17,7 +17,7 @@ class Hitokoto extends CI_Controller
         $(this) . select()
         });
       $('.btn') . click(function () {
-          $('input.url') . val($('.protocol') . val() + "://{$hostname}/hitokoto/api?encode=" + $('.version') . val()) . select();
+          $('input.url') . val($('.protocol') . val() + "://{$hostname}/hitokoto/api?encode=" + $('.encode') . val()) . select();
         })
     })
 EOT;
