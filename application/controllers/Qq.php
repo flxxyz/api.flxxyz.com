@@ -133,6 +133,8 @@ EOT;
         $url = "http://q.qlogo.cn/headimg_dl?dst_uin=$qq&spec=$size";
         //echo $url;
 
+        $this->db->set($this->monitor('qq-icon'));
+        $this->db->like('type', 'qq-icon')->insert('monitor');
         showImage($url);
     }
 
