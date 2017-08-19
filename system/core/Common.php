@@ -981,3 +981,13 @@ if ( !function_exists('unicode_decode') ) {
     }
 }
 
+if ( !function_exists('message') ) {
+    function message($code = 0, $status = '', $message = '', $result = []) {
+        return json_encode([
+            'code' => $code,
+            'status' => $status,
+            'message' => $message,
+            'result' => $result
+        ]);
+    }
+}
