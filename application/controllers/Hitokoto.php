@@ -1,5 +1,5 @@
 <?php
-
+defined('BASEPATH') OR exit('No direct script access allowed');
 class Hitokoto extends CI_Controller
 {
     public $protocol, $encode = 'json';
@@ -47,7 +47,7 @@ class Hitokoto extends CI_Controller
 EOT;
 
         $this->load->view('Layout/header', [
-            'title' => 'Hitokoto - API by Flxxyz.com',
+            'title' => 'Hitokoto - Public API Service',
             'author' => 'Flxxyz',
             'description' => '分享一言，分享感动。',
             'keywords' => '一言,一句话,ヒトコト,动漫语录,动漫,语录,动漫经典语录,经典动漫台词,ACG,冯小贤',

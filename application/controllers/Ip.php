@@ -5,7 +5,7 @@
  * Date: 2017/8/11
  * Time: 12:40
  */
-
+defined('BASEPATH') OR exit('No direct script access allowed');
 class Ip extends CI_Controller
 {
     public $encode, $source, $ip;
@@ -54,7 +54,7 @@ $(function() {
 EOT;
 
         $this->load->view('Layout/header', [
-            'title' => 'IPQuery - API by Flxxyz.com',
+            'title' => 'IPQuery - Public API Service',
             'author' => 'Flxxyz',
             'description' => 'IP查询',
             'keywords' => 'IP查询,IP地址,ip',

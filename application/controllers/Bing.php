@@ -1,5 +1,5 @@
 <?php
-
+defined('BASEPATH') OR exit('No direct script access allowed');
 class Bing extends CI_Controller
 {
     public $id, $html, $encode;
@@ -53,7 +53,7 @@ class Bing extends CI_Controller
 EOT;
 
         $this->load->view('Layout/header', [
-            'title' => 'Bing - API by Flxxyz.com',
+            'title' => 'Bing - Public API Service',
             'author' => 'Flxxyz',
             'description' => '必应壁纸',
             'keywords' => '必应壁纸,必应图片',

@@ -1,5 +1,5 @@
 <?php
-
+defined('BASEPATH') OR exit('No direct script access allowed');
 class Home extends CI_Controller
 {
     public function index()
@@ -22,7 +22,7 @@ class Home extends CI_Controller
         }
 
         $this->load->view('Layout/header', [
-            'title' => 'API by Flxxyz.com',
+            'title' => 'Public API Service',
             'author' => 'Flxxyz',
             'description' => '希望各位大佬放过＞﹏＜，别做奇怪的事情',
             'keywords' => '自用API,冯小贤,分享',

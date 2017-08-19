@@ -1,5 +1,5 @@
 <header>
-    <h2>API by Flxxyz.com</h2>
+    <h2>Public API Service</h2>
     <span><a href="<?php echo base_url('/', $protocol); ?>" class="protocol <?php echo $protocol?>">切换至<?=$protocol?></a></span>
 </header><!-- /header --><hr>
 <article>

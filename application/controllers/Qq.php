@@ -5,11 +5,14 @@
  * Date: 2017/8/6
  * Time: 22:35
  */
-
+defined('BASEPATH') OR exit('No direct script access allowed');
 class QQ extends CI_Controller
 {
     public $qq, $protocol, $size;
 
+    /**
+     * 首页
+     */
     public function index()
     {
         $protocol = is_https() ? 'https' : 'http';
@@ -51,7 +54,7 @@ $(function() {
 EOT;
 
         $this->load->view('Layout/header', [
-            'title' => 'QQ - API by Flxxyz.com',
+            'title' => 'QQ - Public API Service',
             'author' => 'Flxxyz',
             'description' => '加密链接内QQ号，不用烦恼如何隐藏链接里的QQ号辣~',
             'keywords' => 'QQ头像解析,加密QQ头像连接,加密,QQ,qlogoK值',
@@ -60,6 +63,9 @@ EOT;
         $this->load->view('Layout/footer', ['script' => $script]);
     }
 
+    /**
+     * 提供API接口服务
+     */
     public function api()
     {
         // 获取QQ号，否则默认

@@ -5,7 +5,7 @@
  * Date: 2017/8/6
  * Time: 22:48
  */
-
+defined('BASEPATH') OR exit('No direct script access allowed');
 class Miaopai extends CI_Controller
 {
     public $base64, $url;
@@ -58,7 +58,7 @@ $(function() {
 EOT;
 
         $this->load->view('Layout/header', [
-            'title' => 'Miaopai - API by Flxxyz.com',
+            'title' => 'Miaopai - Public API Service',
             'author' => 'Flxxyz',
             'description' => '秒拍视频API',
             'keywords' => '秒拍,秒拍视频,秒拍视频解析,秒拍API,api,秒拍视频API',
