@@ -908,22 +908,23 @@ if ( !function_exists('showImage') ) {
 }
 
 if ( !function_exists('getHttp') ) {
-    function getHttp($url) {
+    function getHttp($url)
+    {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_REFERER, $url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET' );
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36');
         ob_start();
-        $code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $result = curl_exec($ch);
         ob_end_clean();
         curl_close($ch);
-        if($code != '404' && $result)
+        if ( $code != '404' && $result )
             return $result;
         else
             return false;
@@ -931,7 +932,52 @@ if ( !function_exists('getHttp') ) {
 }
 
 if ( !function_exists('getProtocol') ) {
-    function getProtocol() {
+    function getProtocol()
+    {
         return is_https() ? 'https' : 'http';
     }
 }
+
+if ( !function_exists('unicode_encode') ) {
+    function unicode_encode($name)
+    {
+        $name = iconv('UTF-8', 'UCS-2', $name);
+        $len = strlen($name);
+        $str = '';
+        for ( $i = 0; $i < $len - 1; $i = $i + 2 ) {
+            $c = $name[$i];
+            $c2 = $name[$i + 1];
+            if ( ord($c) > 0 ) {
+                $str .= '\u' . base_convert(ord($c), 10, 16) . base_convert(ord($c2), 10, 16);
+            } else {
+                $str .= $c2;
+            }
+        }
+        return $str;
+    }
+}
+
+if ( !function_exists('unicode_decode') ) {
+    function unicode_decode($name)
+    {
+        $pattern = '/([\w]+)|(\\\u([\w]{4}))/i';
+        preg_match_all($pattern, $name, $matches);
+        if ( !empty($matches) ) {
+            $name = '';
+            for ( $j = 0; $j < count($matches[0]); $j++ ) {
+                $str = $matches[0][$j];
+                if ( strpos($str, '\\u') === 0 ) {
+                    $code = base_convert(substr($str, 2, 2), 16, 10);
+                    $code2 = base_convert(substr($str, 4), 16, 10);
+                    $c = chr($code) . chr($code2);
+                    $c = iconv('UCS-2', 'UTF-8', $c);
+                    $name .= $c;
+                } else {
+                    $name .= $str;
+                }
+            }
+        }
+        return $name;
+    }
+}
+
