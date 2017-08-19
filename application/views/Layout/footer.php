@@ -1,5 +1,5 @@
 <footer>
-    <script src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/hitokoto/api?encode=js"></script>
+    <script src="<?php echo base_url('/hitokoto/api', (is_https()?'https':'http')) ?>?encode=js"></script>
     <div id="hitokoto">
         <script>hitokoto()</script>
     </div>
