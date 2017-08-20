@@ -1,6 +1,6 @@
 <header>
     <h1>QQ头像 qq-icon</h1>
-    <span><a href="http://api.flxxyz.com">回到首页</a></span>
+    <span><a href="/">回到首页</a></span>
 </header><!-- header_end --><hr>
 <article>
     <h3>使用手册</h3>
