@@ -9,5 +9,6 @@
         <li><a href="<?php echo base_url('/bing',  getProtocol()); ?>">Bing壁纸 Bing</a></li>
         <li><a href="<?php echo base_url('/miaopai',  getProtocol()); ?>">MiaoPai解析 MiaoPai</a></li>
         <li><a href="<?php echo base_url('/ip',  getProtocol()); ?>">IP查询 IPQuery</a></li>
+        <li><a href="<?php echo base_url('/qr',  getProtocol()); ?>">二维码 QrCode</a></li>
     </ul>
 </article>

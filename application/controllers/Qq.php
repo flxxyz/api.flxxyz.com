@@ -15,8 +15,7 @@ class QQ extends CI_Controller
      */
     public function index()
     {
-        $protocol = is_https() ? 'https' : 'http';
-        $url = base_url('/qq/api', $protocol);
+        $url = base_url('/qq/api', getProtocol());
 
         $script = <<<EOT
 $(function() {
@@ -24,13 +23,13 @@ $(function() {
 		$(this).select()
 	});
     $('.btn').click(function() {
-    	var qq = $('input.qq');
+    	var qq = $('input.qq').val();
     	var re = /^[1-9][0-9]{4,11}$/;
-        if( (qq.val() === '') ) {
+        if(!qq) {
             alert('请填写QQ号');
             return;
         }
-        if( !re.test(qq.val()) ) {
+        if(!re.test(qq)) {
         	alert('格式输入不正确呀，再来一次？');
             return;
         }
@@ -39,7 +38,7 @@ $(function() {
             type: 'post',
             dataType: 'json',
             data: {
-            	qq: qq.val(),
+            	qq: qq,
             	protocol: $('select.protocol').val(),
             	size: $('select.size').val()
             },
