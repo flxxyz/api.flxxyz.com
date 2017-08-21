@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: fff
- * Date: 2017/8/17
- * Time: 18:09
- */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 use Endroid\QrCode\QrCode;
@@ -38,9 +32,25 @@ $(function() {
 	            content: content
 	        },
 	        success: function(res) {
-	            $('.url').val(res.result.url);
+	            var url = res.result.url;
+	            var type = $('#type').val()
+	            var size = $('#size').val();
+	            if(type != 'png') {
+	                url = url + '?type=' + type;
+	            }
+	            if(res.result.url != url) {
+	                if(size) {
+	                    url = url + '&size=' + size;
+	                }
+	            }else {
+	                if(size) {
+	                    url = url + '?size=' + size;
+	                }
+	            }
+	            
+	            $('.url').val(url);
 	            $('.message').text(res.message);
-                var showIcon = $('<img>').attr('src', res.result.url);
+                var showIcon = $('<img>').attr('src', url);
                 $('.result').next().html(showIcon);
 	        }
 	    });
@@ -156,6 +166,9 @@ EOT;
         echo $qr->writeString();
     }
 
+    /**
+     * shadowsocks二维码
+     */
     protected function ss()
     {
         $config = [

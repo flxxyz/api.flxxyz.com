@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: fff
- * Date: 2017/8/6
- * Time: 22:48
- */
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Miaopai extends CI_Controller
 {

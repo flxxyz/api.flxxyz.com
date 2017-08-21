@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: fff
- * Date: 2017/8/11
- * Time: 12:40
- */
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Ip extends CI_Controller
 {
