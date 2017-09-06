@@ -21,7 +21,7 @@ if ( $is_login ) {
 <form action="<?php echo site_url('manager/loginc') ?>">
     <div class="box">
         <label for="username">用户名：</label>
-        <input type="text" id="username" name="username">
+        <input type="text" id="username" name="username" value="<?php echo $username;?>">
     </div>
     <div class="box">
         <label for="password">密&nbsp;&nbsp;码：</label>
