@@ -107,9 +107,9 @@ EOT;
             exit(message(200, 'success', '当前二维码存在', $result));
         }
 
-        $name = base_convert(unicode_encode($value), 10, 2);
-        $name = md5(base64_encode($name));
-        $name = base_convert($name, 10, 32);
+        $name = md5(base64_encode($value));
+        $name = base_convert($name, 10, 2);
+        $name = base_convert($name, 2, 32);
 
         $row = [
             'name' => $name,

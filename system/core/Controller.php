@@ -77,11 +77,8 @@ class CI_Controller
 
         $this->load =& load_class('Loader', 'core');
         $this->load->initialize();
-        $this->load->helper('url');
         ini_set('date.timezone', 'PRC');
         //date_default_timezone_set('PRC');
-        $dsn = 'mysqli://homestead:secret@127.0.0.1/api_dev';
-        $this->load->database($dsn);
         log_message('info', 'Controller Class Initialized');
     }
 
