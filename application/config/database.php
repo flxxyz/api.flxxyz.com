@@ -73,7 +73,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
-$db['default'] = array(
+$db['default'] = [
 	'dsn'	=> 'mysqli://homestead:secret@127.0.0.1/api_dev',
 	'hostname' => 'localhost',
 	'username' => 'homestead',
@@ -83,7 +83,7 @@ $db['default'] = array(
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
-	'cache_on' => FALSE,
+	'cache_on' => TRUE,
 	'cachedir' => '',
 	'char_set' => 'utf8mb4',
 	'dbcollat' => 'utf8mb4_general_ci',
@@ -91,6 +91,6 @@ $db['default'] = array(
 	'encrypt' => FALSE,
 	'compress' => FALSE,
 	'stricton' => FALSE,
-	'failover' => array(),
+	'failover' => [],
 	'save_queries' => TRUE
-);
+];

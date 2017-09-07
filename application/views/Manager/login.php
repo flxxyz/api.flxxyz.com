@@ -7,12 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>登陆 - 管理</title>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/static/js/manager.js"></script>
+    <script src="/static/js/manager/manager.js"></script>
 </head>
 <body>
 <?php
-if ( $is_login ) {
-    echo "<p>$message</p>" . $script;
+if ( $state ) {
+    echo "<p>$message</p><script>$script_val</script><script src=\"$script\"></script>";
 }else {
     if ( $message ) {
         echo "<p>$message</p>";
