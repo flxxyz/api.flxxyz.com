@@ -377,12 +377,12 @@ $config['encryption_key'] = '';
 | except for 'cookie_prefix' and 'cookie_httponly', which are ignored here.
 |
 */
-$config['sess_driver'] = 'redis';
+$config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'ci_session';
-$config['sess_expiration'] = 7200;
-$config['sess_save_path'] = 'tcp://localhost:6379?weight=1&timeout=120';
+$config['sess_expiration'] = 3600;
+$config['sess_save_path'] = FCPATH.'/application/cache/';  // tcp://localhost:6379?weight=1&timeout=120
 $config['sess_match_ip'] = FALSE;
-$config['sess_time_to_update'] = 120;
+$config['sess_time_to_update'] = 3600;  // 一个小时更新
 $config['sess_regenerate_destroy'] = FALSE;
 
 /*

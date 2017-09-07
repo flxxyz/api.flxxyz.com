@@ -41,35 +41,9 @@ class Manager extends CI_Controller
         $token = get('token');
         $script = '/static/js/manager/success.js';
 
-        if($this->session->sess_id !== session_id() and $this->session->state > 1) {
-            $user = $this->userinfo($this->session->username);
-            var_dump($user['name']);
-            if($user['name']){}
-
-            //$this->session->state = 1;
-            //$this->session->message = '登陆超时，请重新登陆';
-
-        }else {
-//            if($this->session->sess_id !== session_id()) {
-//                $this->db->set(['online' => 0])
-//                    ->select('online')
-//                    ->where(['id' => str_replace('18000', '', $this->session->id)])
-//                    ->update('user');
-//            }
-
-            if($this->session->state === 3) {
-                var_dump('33333333333333');
-//                if($token === md5($this->session->token)) {
-//                    return $this->load->view('Manager/login', [
-//                        'state' => ( $this->session->state < 2 ) ? false : true,
-//                        'message' => $this->session->message . "<input type='hidden' class='csf' value='{$this->session->token}'>",
-//                        'username' => $this->session->username,
-//                        'script' => '/static/js/manager/online.js',
-//                        'script_val' => '',
-//                    ]);
-//                }
-            }else if($this->session->state === 2) {
-                var_dump('22222222222222');
+        if(!($this->session->sess_id !== session_id() and $this->session->state > 1)) {
+            if($this->session->state === 2) {
+                // 用户在线
                 $script = '/static/js/manager/online.js';
                 $this->session->message = "当前用户在线，是否要继续登陆？<input type='hidden' class='csf' value='{$this->session->sess_id}'>";
 
@@ -86,53 +60,10 @@ class Manager extends CI_Controller
                     $this->session->state = 0;
                     $this->session->unset_userdata('message');
                 }
+            }else if($this->session->state === 3) {
+                // 成功登陆
             }
         }
-        var_dump($this->session, session_id());
-        /*
-        // 验证通过
-        if(isset($this->session->state)) {
-            var_dump(md5(session_id()), md5($this->session->sess_id));
-
-            if(!$token) {
-                if($this->session->state === 3) {
-                    // 已登陆
-                    var_dump(3);
-                    var_dump($token, md5($this->session->token));
-                    //var_dump($token === md5($this->session->token));
-
-                    //$this->session->message = '已登陆，正在跳转...';
-                    if($token === md5($this->session->token)) {
-                        return $this->load->view('Manager/login', [
-                            'state' => ( $this->session->state < 2 ) ? false : true,
-                            'message' => $this->session->message . "<input type='hidden' class='csf' value='{$this->session->token}'>",
-                            'username' => $this->session->username,
-                            'script' => '/static/js/manager/online.js',
-                            'script_val' => '',
-                        ]);
-                    }
-                } else if($this->session->state === 2) {
-                    // 用户在线时
-                    var_dump(2);
-                    return $this->load->view('Manager/login', [
-                        'state' => ( $this->session->state < 2 ) ? false : true,
-                        'message' => $this->session->message . "<input type='hidden' class='csf' value='{$this->session->token}'>",
-                        'username' => $this->session->username,
-                        'script' => '/static/js/manager/online.js',
-                        'script_val' => '',
-                        ]);
-                }
-            }else {
-                if($token === md5($this->session->token)) {
-                    $this->session->state = 3;
-                    $this->session->message = '登陆成功, <span id="time">3</span>秒后跳转';
-                    // 登陆成功更新token
-                    $this->db->set(['online' => 1, 'token' => session_id()])->select('online', 'token')->where(['id' => str_replace('18000', '', $this->session->id)])->update('user');
-                }
-            }
-        }
-        */
-
 
         $this->load->view('Manager/login', [
             'state' => ( $this->session->state < 2 ) ? false : true,
@@ -268,12 +199,7 @@ class Manager extends CI_Controller
      */
     public function u ($id = '')
     {
-        $this->load->driver('cache');
-        $this->cache->redis->get('ci_session:' . session_id());
-
         // 重复登陆
-        var_dump(session_id(), $this->session->sess_id);
-        var_dump(session_id() !== $this->session->sess_id);
         $user = $this->userinfo($this->session->username);
         if(session_id() !== $user['token']) {
             // 当前不等于数据库数据为其它账号登陆
