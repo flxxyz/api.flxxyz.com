@@ -234,6 +234,6 @@ class Manager extends CI_Controller
             }
         }
 
-        redirect('manager/login');
+        redirect('manager');
     }
 }
