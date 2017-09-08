@@ -12,7 +12,8 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
-		"endroid/qrcode": "^2.3"
+		"endroid/qrcode": "^2.3",
+		"csitc/real-rap": "^1.0"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a2489b4d0ddfd1a55cd1a4a3e980616b",
+    "content-hash": "4007292d6621aabab57c9f8da227229b",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -47,6 +47,46 @@
             "description": "BaconQrCode is a QR code generator for PHP.",
             "homepage": "https://github.com/Bacon/BaconQrCode",
             "time": "2016-01-09T22:55:35+00:00"
+        },
+        {
+            "name": "csitc/real-rap",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wugang8068/RealRap.git",
+                "reference": "62f26fca42839a8842f304b32080b19af0f32b71"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/wugang8068/RealRap/62f26fca42839a8842f304b32080b19af0f32b71.zip",
+                "reference": "62f26fca42839a8842f304b32080b19af0f32b71",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.30"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "RealRap\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chart",
+                    "email": "152806894@qq.com"
+                }
+            ],
+            "description": "Codeigniter ORM for 3.0 or higher",
+            "keywords": [
+                "ci",
+                "orm"
+            ],
+            "time": "2016-09-23T14:53:39+00:00"
         },
         {
             "name": "endroid/qrcode",

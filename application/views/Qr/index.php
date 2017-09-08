@@ -19,7 +19,7 @@
             <ul>
                 <li><span>png</span> 返回png格式二维码【默认】</li>
                 <li><span>svg</span> 返回svg格式二维码</li>
-                <li><span>eps</span> 返回eps格式二维码</li>
+                <!--li><span>eps</span> 返回eps格式二维码</li-->
             </ul>
         </li>
         <li><span>size</span> 数值大小 【默认180】(不包含边框)</li>
@@ -33,7 +33,7 @@
                 <select name="type" id="type">
                     <option value="png">png</option>
                     <option value="svg">svg</option>
-                    <option value="eps">eps</option>
+                    <!--option value="eps">eps</option-->
                 </select>
             </section>
             <section>
