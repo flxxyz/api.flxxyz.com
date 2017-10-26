@@ -12,6 +12,8 @@
 composer update
 ```
 
+将目录下的 `database.sql` 导入数据库
+
 - - - -
 
-> 冯小贤 2017.09.07 updated
+> 冯小贤 2017.10.26 updated
