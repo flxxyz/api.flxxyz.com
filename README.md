@@ -3,8 +3,14 @@
 ### 当前版本 ###
 
     author: Flxxyz
-    version: 2.1.2
-    description: 添加基础登陆后台，单用户登陆
+    version: 2.1.4
+    description: 添加快递单号查询
+
+## 使用
+更新package
+```shell
+composer update
+```
 
 - - - -
 
