@@ -12,7 +12,8 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
-		"endroid/qrcode": "^2.3"
+		"endroid/qrcode": "^2.3",
+		"csitc/real-rap": "^1.0"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
@@ -20,5 +21,10 @@
 	"require-dev": {
 		"mikey179/vfsStream": "1.1.*",
 		"phpunit/phpunit": "4.* || 5.*"
+	},
+	"autoload": {
+		"psr-4": {
+			"App\\": "application/"
+		}
 	}
 }

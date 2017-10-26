@@ -1,9 +1,11 @@
 var timer = setInterval(function() {
-    var a = parseInt($('#time').text());
-    if(a === 0) {
+    var $time = $('#time');
+    var n = $time.text();
+    if(parseInt($time.text()) === 0) {
         clearInterval(timer);
+        $time.text(0);
     }
-    $('#time').text(--a);
+    $time.text(--n);
 }, 1000);
 var redirect = setTimeout(function() {
     window.location.href = url;

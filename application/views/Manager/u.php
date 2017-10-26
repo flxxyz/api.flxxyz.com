@@ -11,13 +11,14 @@
 </head>
 <body>
 <header>
-    <a href="<?php echo site_url('manager/logout') ?>">退出登陆</a>
+    <a href="<?= site_url('manager/logout') ?>">退出登陆</a>
+    <?= session_id() ?>
 </header>
 <main>
-    <?php echo $username; ?>
+    <?= $username ?>
 </main>
 <footer>
-    <?php echo date('Y'); ?>&copy;
+    <?= date('Y') ?>&copy;
 </footer>
 
 </body>

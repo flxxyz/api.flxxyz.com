@@ -2,6 +2,7 @@
 
 /node_modules/
 
+static/img/captcha/*
 application/cache/*
 !application/cache/index.html
 !application/cache/.htaccess

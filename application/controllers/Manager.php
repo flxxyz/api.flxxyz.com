@@ -19,7 +19,6 @@ class Manager extends CI_Controller
                 redirect('manager/u/' . $this->session->id);
             } else if($this->session->state === 2) {
                 $this->session->message = '当前用户在线，是否要继续登陆？';
-                redirect('manager/login');
             }
         }
 
@@ -71,6 +70,10 @@ class Manager extends CI_Controller
             'username' => $this->session->username,
             'script' => $script,
             'script_val' => "var url = '{$this->session->url}'",
+            'csrf' => [
+                'name' => $this->security->get_csrf_token_name(),
+                'hash' => $this->security->get_csrf_hash(),
+            ],
             ]);
     }
 
@@ -80,11 +83,12 @@ class Manager extends CI_Controller
     public function loginc ()
     {
         // 处理xss攻击
-        $name = xss_clean(get('username'));
-        $pwd = xss_clean(get('password'));
+        $name = xss_clean(post('username'));
+        $pwd = xss_clean(post('password'));
+        $csrf = xss_clean(post('csrf_token_name'));
 
         if($name) {
-            if($state = $this->check($name, $pwd)) {
+            if(1 < $state = $this->check($name, $pwd)) {
                 // 用户在线
                 if($state === 2) {
                     $this->session->state = 2;
@@ -95,7 +99,9 @@ class Manager extends CI_Controller
             }
         } else {
             $this->session->state = 1;
+            $this->session->message = '请输入用户名或密码';
         }
+
 
         redirect('manager/login');
     }
@@ -114,15 +120,18 @@ class Manager extends CI_Controller
         if(hash('sha256', "$name:$pwd") !== $user['password']) {
             $this->session->state = 1;
             $this->session->message = '用户名或密码错误';
-            redirect('manager/login');
+            return 1;
         }
 
         // 预设信息
         $this->session->username = $user['name'];
         $this->session->id = '18000' . $user['id'];
+        $this->session->user_id = $user['id'];
         $this->session->sess_id = session_id();
         $this->session->message = '登陆成功, <span id="time">3</span>秒后跳转';
         $this->session->url = site_url('manager/u/') . $this->session->id;
+        $this->session->user_agent = $this->input->user_agent(true);
+        $this->session->client_ip = $this->input->ip_address();
 
         // 检查在线
         if($user['online']) {
@@ -154,9 +163,11 @@ class Manager extends CI_Controller
             // 清空当前登陆会话
             $this->session->unset_userdata('url');
             $this->session->unset_userdata('id');
+            $this->session->unset_userdata('user_id');
             $this->session->unset_userdata('sess_id');
-            $this->session->unset_userdata('token');
             $this->session->unset_userdata('username');
+            $this->session->unset_userdata('user_agent');
+            $this->session->unset_userdata('client_ip');
             $this->session->unset_userdata('message');
             $this->session->state = 0;
             $url = base_url('manager/login');
@@ -235,5 +246,39 @@ class Manager extends CI_Controller
         }
 
         redirect('manager');
+    }
+
+    public function captcha ()
+    {
+        $vals = array(
+            'img_path'  => FCPATH . 'static/img/captcha/',
+            'img_url'   => 'http://api.dev/static/img/captcha/',
+            'font_path' => FCPATH . 'system/fonts/texb.ttf',
+            'img_width' => 120,
+            'img_height'    => 32,
+            'expiration'    => 3600,
+            'word_length'   => 4,
+            'font_size' => 16,
+            'img_id'    => 'Imageid',
+            'pool'      => '123456789ABCDEFGHIJKLMNPQRSTUVWXYZ',
+
+            // White background and border, black text and red grid
+            'colors'    => array(
+                'background' => array(255, 255, 255),
+                'border' => array(255, 255, 255),
+                'text' => array(0, 0, 0),
+                'grid' => array(255, 40, 40)
+            )
+        );
+
+        $cap = create_captcha($vals);
+//        var_dump($cap);
+        //echo $cap['image'];
+        echo json_encode($cap);
+    }
+
+    public function a() {
+        $this->session->state = 0;
+        $this->session->unset_userdata('token');
     }
 }
