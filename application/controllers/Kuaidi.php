@@ -11,14 +11,11 @@ class Kuaidi extends CI_Controller
      */
     public function index()
     {
-        $script = <<<EOT
-EOT;
         $query = $this->db->get('kuaidi');
-        $select = '<select>';
+        $options = '';
         foreach ($query->result() as $row) {
-            $select .= "<option value='{$row->name}'>{$row->name}</option>";
+            $options .= "<option value='{$row->name}'>{$row->name}</option>";
         }
-        $select .= '</select>';
 
         $this->load->view('Layout/header', [
             'title' => 'Kuaidi - Public API Service',
@@ -27,16 +24,18 @@ EOT;
             'keywords' => '快递查询',
         ]);
         $this->load->view('Kuaidi/index', [
-            'select' => $select,
+            'options' => $options,
             'number' => $this->db->like('type', 'kuaidi')->count_all_results('monitor'),
         ]);
-        $this->load->view('Layout/footer', ['script' => $script]);
+        $this->load->view('Layout/footer', [
+            'script' => '',
+        ]);
     }
 
-    public function name()
+    public function company()
     {
         $data = '';
-        $name = get('kuaidi', '');
+        $name = get('company', '');
         if ($name != '') {
             $data = '<tr><th>公司名称</th><th> 名称拼音 </th></tr>';
             $query = $this->db->like('name', $name)->get('kuaidi');
@@ -56,7 +55,7 @@ EOT;
             'description' => '提供快递查询接口服务',
             'keywords' => '快递查询',
         ]);
-        $this->load->view('Kuaidi/name', [
+        $this->load->view('Kuaidi/company', [
             'kuaidi' => $name,
             'result' => $data
         ]);
@@ -67,19 +66,18 @@ EOT;
      */
     public function api()
     {
-        $kuaidi_name = get('name');
+        $kuaidi_name = get('company');
         $danhao = get('num', '0000000000000');
         $query = $this->db->like('name', $kuaidi_name)->get('kuaidi', 0, 1);
 
         $uri = 'http://www.kuaidi.com/index-ajaxselectcourierinfo-[%YD%]-[%KD%].html';
         foreach ($query->result() as $row) {
-            var_dump($row);
             $uri = str_replace('[%YD%]', $danhao, $uri);
             $uri = str_replace('[%KD%]', $row->value, $uri);
         }
 
         $this->data = getHttp($uri);
-        //echo $this->init($kuaidi_name);
+        echo $this->init($kuaidi_name);
     }
 
     /**
@@ -90,7 +88,8 @@ EOT;
     protected function init($company = '')
     {
         $data = json_decode($this->data);
-        var_dump($data);
+
+        // 返回数据体结构
         $response = [
             'success' => $data->success,
             'phone' => $data->phone,
@@ -103,6 +102,7 @@ EOT;
             'timeused' => 0,
             'exceed' => '',
         ];
+
         // 提取快递公司中英文名称
         $query = $this->db->where(['name' => $company])->get('kuaidi', 0, 1);
         $query = $query->result_array();

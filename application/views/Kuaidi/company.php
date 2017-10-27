@@ -44,11 +44,11 @@
 </style>
 <header>
     <h1>快递公司名称查询</h1>
-    <span><a href="/">回到首页</a></span>
+    <span><a href="/kuaidi">回到kuaidi</a></span>
 </header><!-- header_end --><hr>
 <form action="#">
     <div>
-        <input id="kuaidi" type="text" name="kuaidi" value="<?=$kuaidi?>" placeholder="输入查找的快递公司"><button type="submit">查询</button>
+        <input id="kuaidi" type="text" name="company" value="<?=$kuaidi?>" placeholder="输入查找的快递公司"><button type="submit">查询</button>
     </div>
 </form>
 <table>
