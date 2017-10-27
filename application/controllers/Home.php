@@ -23,7 +23,7 @@ class Home extends CI_Controller
 
         $this->load->view('Layout/header', [
             'title' => 'Public API Service',
-            'author' => 'Flxxyz',
+            'author' => '冯小贤',
             'description' => '希望各位大佬放过＞﹏＜，别做奇怪的事情',
             'keywords' => '自用API,冯小贤,分享',
         ]);

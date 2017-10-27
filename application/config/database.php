@@ -74,11 +74,11 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = [
-	'dsn'	=> 'mysqli://homestead:secret@127.0.0.1/api_dev',
+	'dsn'	=> 'mysqli://root:@127.0.0.1/api',
 	'hostname' => 'localhost',
-	'username' => 'homestead',
-	'password' => 'secret',
-	'database' => 'api_dev',
+	'username' => 'root',
+	'password' => '',
+	'database' => 'api',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

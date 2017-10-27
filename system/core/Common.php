@@ -824,10 +824,10 @@ if ( !function_exists('get') ) {
      * 返回GET方法的值
      *
      * @param $name
-     *
+     * @param $define
      * @return mixed
      */
-    function get($name)
+    function get($name, $define = '')
     {
         if ( empty($_GET[$name]) === '0' )
             return '';
@@ -836,7 +836,7 @@ if ( !function_exists('get') ) {
         else if ( @$_GET[$name] == 'true' )
             return '';
         else
-            return @$_GET[$name] ? $_GET[$name] : '';
+            return @$_GET[$name] ? $_GET[$name] : $define;
 
     }
 }

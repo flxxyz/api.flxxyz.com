@@ -48,7 +48,7 @@ EOT;
 
         $this->load->view('Layout/header', [
             'title' => 'QQ - Public API Service',
-            'author' => 'Flxxyz',
+            'author' => '冯小贤',
             'description' => '加密链接内QQ号，不用烦恼如何隐藏链接里的QQ号辣~',
             'keywords' => 'QQ头像解析,加密QQ头像连接,加密,QQ,qlogoK值',
         ]);

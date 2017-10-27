@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://api.dev';
+$config['base_url'] = 'http://api.py';
 
 /*
 |--------------------------------------------------------------------------
@@ -382,7 +382,7 @@ $config['sess_cookie_name'] = 'ci_session';
 $config['sess_expiration'] = 3600;
 $config['sess_save_path'] = FCPATH.'/application/cache/';  // tcp://localhost:6379?weight=1&timeout=120
 $config['sess_match_ip'] = FALSE;
-$config['sess_time_to_update'] = 3600;  // 一个小时更新
+$config['sess_time_to_update'] = 30;  // 一个小时更新
 $config['sess_regenerate_destroy'] = FALSE;
 
 /*

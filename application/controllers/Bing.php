@@ -54,7 +54,7 @@ EOT;
 
         $this->load->view('Layout/header', [
             'title' => 'Bing - Public API Service',
-            'author' => 'Flxxyz',
+            'author' => '冯小贤',
             'description' => '必应壁纸',
             'keywords' => '必应壁纸,必应图片',
         ]);
