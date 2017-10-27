@@ -51,9 +51,9 @@ class Kuaidi extends CI_Controller
 
         $this->load->view('Layout/header', [
             'title' => 'Kuaidi - Public API Service',
-            'author' => 'Flxxyz',
+            'author' => '冯小贤',
             'description' => '提供快递查询接口服务',
-            'keywords' => '快递查询',
+            'keywords' => '快递查询,快递单号查询',
         ]);
         $this->load->view('Kuaidi/company', [
             'kuaidi' => $name,

@@ -61,7 +61,7 @@ EOT;
 
         $this->load->view('Layout/header', [
             'title' => 'Qrcode - Public API Service',
-            'author' => 'Flxxyz',
+            'author' => '冯小贤',
             'description' => '基本的二维码生成，且支持ss二维码',
             'keywords' => 'qrcode,ss,二维码,二维码生成,ss二维码',
             'css' => $css,
@@ -132,7 +132,7 @@ EOT;
     /**
      * 展示二维码
      *
-     * @param string $parem
+     * @param string $param
      */
     public function image($param)
     {

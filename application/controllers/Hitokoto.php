@@ -48,7 +48,7 @@ EOT;
 
         $this->load->view('Layout/header', [
             'title' => 'Hitokoto - Public API Service',
-            'author' => 'Flxxyz',
+            'author' => '冯小贤',
             'description' => '分享一言，分享感动。',
             'keywords' => '一言,一句话,ヒトコト,动漫语录,动漫,语录,动漫经典语录,经典动漫台词,ACG,冯小贤',
         ]);

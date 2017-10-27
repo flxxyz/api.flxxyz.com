@@ -53,7 +53,7 @@ EOT;
 
         $this->load->view('Layout/header', [
             'title' => 'Miaopai - Public API Service',
-            'author' => 'Flxxyz',
+            'author' => '冯小贤',
             'description' => '秒拍视频API',
             'keywords' => '秒拍,秒拍视频,秒拍视频解析,秒拍API,api,秒拍视频API',
             'css' => '.miaopai { width: 600px }',

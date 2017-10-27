@@ -49,7 +49,7 @@ EOT;
 
         $this->load->view('Layout/header', [
             'title' => 'IPQuery - Public API Service',
-            'author' => 'Flxxyz',
+            'author' => '冯小贤',
             'description' => 'IP查询',
             'keywords' => 'IP查询,IP地址,ip',
         ]);
